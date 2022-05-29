@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
+
+    <script type="text/javascript">
+            window.addEventListener("load", function() {   
+                var initParams = {
+                    srcDpaId : "c21195dc-39eb-422c-8328-db2b0b535ed3"
+                }
+                // window.BcBnpl.init(initParams);
+
+                var paymentProvider = document.getElementById("paymentProvider");
+                var productName = document.getElementById("productName");
+                var transactionAmount = document.getElementById("transactionAmount");
+                var transactionCurrencyCode = document.getElementById("transactionCurrencyCode");
+                var merchantOrderId = document.getElementById("merchantOrderId");
+                var merchantName = document.getElementById("merchantName");
+                var openType = document.getElementById("openType");
+                var returnUrl = document.getElementById("returnUrl");
+                              
+                var openParams = {
+                    paymentProvider : paymentProvider.value,
+                    dpaTransactionOptions : {
+                        productName : productName.value,
+                        transactionAmount : transactionAmount.value,
+                        transactionCurrencyCode : transactionCurrencyCode.value,
+                        merchantOrderId : merchantOrderId.value,
+                        merchantName : merchantName.value
+                    },
+                    openOptions : {
+                        openType : openType.value,
+                        returnUrl : returnUrl.value
+                    }
+                }
+                // console.log(openParams);
+
+                // window.BcBnpl.open(openParams);
+              var srcOpenButton = document.getElementById('open');
+              srcOpenButton.addEventListener("click", function() {
+
+                var openParams = {
+                    paymentProvider : paymentProvider.value,
+                    dpaTransactionOptions : {
+                        productName : productName.value,
+                        transactionAmount : transactionAmount.value,
+                        transactionCurrencyCode : transactionCurrencyCode.value,
+                        merchantOrderId : merchantOrderId.value,
+                        merchantName : merchantName.value
+                    },
+                    openOptions : {
+                        openType : openType.value,
+                        returnUrl : returnUrl.value
+                    }
+                }
+                console.log(JSON.stringify(openParams));
+                window.BcBnpl.open(openParams);
+              });
+
+              // window.BcBnpl.open(openParams);
+              var bnplOpenButton = document.getElementById('openPopup');
+              bnplOpenButton.addEventListener("click", function() {
+                  console.log('open popup');
+
+                  var option = "width=500, height=500";
+                window.open("https://isrnd.bccard.com:34443/app/paybooc/bnplview.bp?exec=intro", 'bnplPopup', {width: '500', hight:'500'});
+
+              });
+
+
+          });
+    </script>
+           </head>
+           <body>
+            <div class="container">
+            <form role="form" >
+                <div class="form-group">
+                  <label for="srcDpaId">bnplClientId:</label>
+                  <input type="text" name="srcDpaId" id="srcDpaId" class="form-control" placeholder="Enter a srcDpaId(UUID)" value="c21195dc-39eb-422c-8328-db2b0b535ed3">
+                                  <div class="form-group">
+                  <button class="btn btn-info" id="init">Src Init</button>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="paymentProvider">paymentProvider:</label>
+                  <input type="text" id="paymentProvider" class="form-control" placeholder="Enter a srcDpaId(UUID)" value="VIETNAM">
+
+                  <label for="productName">productName:</label>
+                  <input type="text" id="productName" class="form-control" placeholder="" value="HarryPorter">
+
+                  <label for="transactionAmount">transactionAmount:</label>
+                  <input type="text" id="transactionAmount" class="form-control" placeholder="" value="11004">
+
+                  <label for="transactionCurrencyCode">transactionCurrencyCode:</label>
+                  <input type="text" id="transactionCurrencyCode" class="form-control" placeholder="" value="410">
+
+                  <label for="merchantOrderId">merchantOrderId:</label>
+                  <input type="text" id="merchantOrderId" class="form-control" placeholder="" value="98765">
+
+                  <label for="merchantName">merchantName:</label>
+                  <input type="text" id="merchantName" class="form-control" placeholder="" value="LotteDuty">
+
+                  <label for="openType">openType:(PAGE, WINDOW)</label>
+                  <input type="text" id="openType" class="form-control" placeholder="" value="WINDOW">
+
+                  <label for="returnUrl">returnUrl:</label>
+                  <input type="text" id="returnUrl" class="form-control" placeholder="" value="">
+                  <button class="btn btn-info" type="button"  id="open">Src Open</button>
+
+                  <label for="popup">popup</label>
+                  <input type="text" id="returnUrl" class="form-control" placeholder="" value="">
+                  <button class="btn btn-info" type="button"  id="openPopup">BNPL POPUP Open</button>
+
+              </div>
+
+            </form>   
+            </div>
+           </body>
+
+
+</html> 

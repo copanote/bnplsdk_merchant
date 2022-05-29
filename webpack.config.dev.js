@@ -53,9 +53,9 @@ module.exports = {
     new webpack.DefinePlugin({ PROFILE: JSON.stringify('development') }),
     new CleanWebpackPlugin(),
     new webpack.BannerPlugin({ banner }),
-    // new HtmlWebpackPlugin({
-    //   template: './test/mer.html',
-    //   filename: 'mer.html',
-    // }),
+    new HtmlWebpackPlugin({
+      template: './mer.html',
+      filename: 'mer.html',
+    }),
   ],
 };

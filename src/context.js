@@ -4,14 +4,14 @@ const Context = () => {
     switch (p) {
       case 'development':
         return {
-          bnplIntro: '',
-          srcbaseUrl: '',
+          bnplIntro: '/bnplview.bp?exec=intro',
+          bnplBaseUrl: 'https://isrnd.bccard.com:34443/app/paybooc',
           loggable: true,
         };
       case 'production':
         return {
           bnplIntro: '',
-          srcbaseUrl: '',
+          bnplBaseUrl: '',
           loggable: false,
         };
     }
