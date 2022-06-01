@@ -3,27 +3,11 @@ import Context from './context';
 const MERCHANT_SDK = () => {
   const context = Context();
   const { bnplIntro, bnplBaseUrl, loggable } = context;
-
   const initMessage = createInitMessage();
 
   if (loggable) {
     console.log('merchantSdk Context[' + bnplIntro + '|' + bnplBaseUrl + ']');
   }
-
-  const init = (initParams) => {
-    if (loggable) {
-      console.log(JSON.stringify(initParams));
-    }
-    return new Promise((resolve, reject) => {
-      if (initParams && initParams.bnplClientId) {
-        initMessage.bnplClientId = initParams.bnplClientId;
-        console.log('Init!!');
-      } else {
-        const fail = createFailMessage('DATA_MISSING', 'bnplClientId is misssing');
-        reject(fail);
-      }
-    });
-  };
 
   const open = (openParams) => {
     if (loggable) {
@@ -31,14 +15,18 @@ const MERCHANT_SDK = () => {
     }
 
     return new Promise((resolve, reject) => {
-      //   if (!openParams || !openParams.paymentProvider || !openParams.openOptions.openType || !openParams.dpaTransactionOptions) {
-      //     reject(createFailMessage('DATA_MISSING', 'open function params are missing'));
-      //   }
-
-      const targetUrl = resolvePaymentProviderUrl(openParams.paymentProvider);
-      console.log('targetUrl:' + targetUrl);
-      const bpForm = createForm(openParams.openOptions.openType, targetUrl);
-      const hiddenFields = createVeitnamInputHiddenField(initMessage, openParams);
+      //validation
+      const fields = Object.keys(createInitMessage());
+      for (let f of fields) {
+        if (!openParams[f]) {
+          const fail = createFailMessage('DATA_MISSING', 'required data is misssing');
+          reject(fail);
+          return;
+        }
+      }
+      const targetUrl = bnplBaseUrl + bnplIntro;
+      const bpForm = createForm(openParams.openType, targetUrl);
+      const hiddenFields = createBnplHiddenField(openParams, fields);
       hiddenFields.map((f) => bpForm.appendChild(f));
       attachToDom(bpForm)
         .then(() => {
@@ -53,16 +41,10 @@ const MERCHANT_SDK = () => {
   };
 
   const publicAPI = {
-    init: init,
     open: open,
   };
 
   return publicAPI;
-};
-
-const resolvePaymentProviderUrl = (provider) => {
-  const context = Context();
-  return context.bnplBaseUrl + context.bnplIntro;
 };
 
 const makeRandomNumber = () => {
@@ -80,7 +62,7 @@ const resolveTarget = (openType) => {
 };
 
 const createForm = (openType, url) => {
-  const id = 'bcsrc_merchant_' + makeRandomNumber();
+  const id = 'bcbnpl_merchant_' + makeRandomNumber();
   const target = resolveTarget(openType);
 
   const bpForm = window.document.createElement('form');
@@ -93,18 +75,23 @@ const createForm = (openType, url) => {
   return bpForm;
 };
 
-const createVeitnamInputHiddenField = (initParams, openParams) => {
+const createBnplHiddenField = (params, fieldArr) => {
   const fields = [];
 
-  fields.push(createInputHiddenType('srcDpaId', initParams.srcDpaId));
-  fields.push(createInputHiddenType('productName', openParams.dpaTransactionOptions.productName));
-  fields.push(createInputHiddenType('paymentProvider', openParams.paymentProvider));
-  fields.push(createInputHiddenType('transactionAmount', openParams.dpaTransactionOptions.transactionAmount));
-  fields.push(createInputHiddenType('transactionCurrencyCode', openParams.dpaTransactionOptions.transactionCurrencyCode));
-  fields.push(createInputHiddenType('merchantOrderId', openParams.dpaTransactionOptions.merchantOrderId));
-  fields.push(createInputHiddenType('merchantName', openParams.dpaTransactionOptions.merchantName));
-  fields.push(createInputHiddenType('openType', openParams.openOptions.openType));
-  fields.push(createInputHiddenType('returnUrl', openParams.openOptions.returnUrl));
+  for (let f of fieldArr) {
+    console.log(f + '::' + params[f]);
+    fields.push(createInputHiddenType(f, params[f]));
+  }
+  // fields.push(createInputHiddenType('bnplClientId',         params.bnplClientId));
+  // fields.push(createInputHiddenType('bnplClientTxId',       params.bnplClientTxId));
+  // fields.push(createInputHiddenType('bnplClientConsumerId', params.bnplClientConsumerId));
+  // fields.push(createInputHiddenType('bnplClientOrderNo',    params.bnplClientId));
+  // fields.push(createInputHiddenType('merchantName',         params.bnplClientId));
+  // fields.push(createInputHiddenType('productName',          params.bnplClientId));
+  // fields.push(createInputHiddenType('numberOfProduct',      params.bnplClientId));
+  // fields.push(createInputHiddenType('amount',               params.bnplClientId));
+  // fields.push(createInputHiddenType('openType',             params.bnplClientId));
+  // fields.push(createInputHiddenType('returnUrl',            params.bnplClientId));
   return fields;
 };
 
@@ -131,16 +118,21 @@ const attachToDom = (element, fn) => {
 const createInitMessage = () => {
   return {
     bnplClientId: '',
+    bnplClientTxId: '',
+    bnplClientConsumerId: '',
+    bnplClientOrderNo: '',
+    merchantName: '',
+    productName: '',
+    numberOfProduct: '',
+    amount: '',
+    returnUrl: '',
+    openType: '',
   };
 };
 
 const OPEN_TYPE = {
   PAGE: 'PAGE',
   WINDOW: 'WINDOW',
-};
-
-const PAYMENT_PROVIDER = {
-  VIETNAM: 'VIETNAM',
 };
 
 const createFailMessage = (code, desc) => {
