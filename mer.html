@@ -10,15 +10,31 @@
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript">
 
+        const axiosPost = () => {
+            axios.post('https://isrnd.bccard.com:34443/app/paybooc/bnpluser.bp?exec=/auth/sms/request', {
+                "name":"신동욱","birthDate":"880622","encrypedSocialNo":"1111111","mobileCompanyCode":"3","mobileNo":"01089733575"
+            }, {
+                headers: {'Access-Control-Allow-Origin': 'https://isrnd.bccard.com:34443'},
+            }) .then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+            
+        };
+
+
         
-            window.addEventListener("load", function() {   
-                var initParams = {
-                    srcDpaId : "c21195dc-39eb-422c-8328-db2b0b535ed3"
-                }
+            window.addEventListener("load", function() {
+                axiosPost();
+                const queryString = new URLSearchParams(new FormData(myform)).toString()
+                console.log("queryString: " + queryString);
+
     
 
                 const parmas = createInitMessage();
@@ -70,8 +86,10 @@
     </script>
            </head>
            <body>
+            <form id="myform" role="form" >
+
             <div class="container">
-            <form role="form" >
+            <form id="myform" role="form" >
                 <div class="form-group">
                   <label for="srcDpaId">bnplClientId:</label>
                   <input type="text" name="bnplClientId" id="bnplClientId" class="form-control" placeholder="Enter a bnplCliendId" value="80">
