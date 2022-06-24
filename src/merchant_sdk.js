@@ -3,7 +3,6 @@ import Context from './context';
 const MERCHANT_SDK = () => {
   const context = Context();
   const { bnplIntro, bnplBaseUrl, loggable } = context;
-  const initMessage = createInitMessage();
 
   if (loggable) {
     console.log('merchantSdk Context[' + bnplIntro + '|' + bnplBaseUrl + ']');
@@ -79,19 +78,11 @@ const createBnplHiddenField = (params, fieldArr) => {
   const fields = [];
 
   for (let f of fieldArr) {
-    console.log(f + '::' + params[f]);
+    if (loggable) {
+      console.log(f + '::' + params[f]);
+    }
     fields.push(createInputHiddenType(f, params[f]));
   }
-  // fields.push(createInputHiddenType('bnplClientId',         params.bnplClientId));
-  // fields.push(createInputHiddenType('bnplClientTxId',       params.bnplClientTxId));
-  // fields.push(createInputHiddenType('bnplClientConsumerId', params.bnplClientConsumerId));
-  // fields.push(createInputHiddenType('bnplClientOrderNo',    params.bnplClientId));
-  // fields.push(createInputHiddenType('merchantName',         params.bnplClientId));
-  // fields.push(createInputHiddenType('productName',          params.bnplClientId));
-  // fields.push(createInputHiddenType('numberOfProduct',      params.bnplClientId));
-  // fields.push(createInputHiddenType('amount',               params.bnplClientId));
-  // fields.push(createInputHiddenType('openType',             params.bnplClientId));
-  // fields.push(createInputHiddenType('returnUrl',            params.bnplClientId));
   return fields;
 };
 
@@ -126,6 +117,7 @@ const createInitMessage = () => {
     numberOfProduct: '',
     amount: '',
     returnUrl: '',
+    ci: '',
     openType: '',
   };
 };
