@@ -8,8 +8,8 @@ const banner = require('./src/banner.js');
 module.exports = {
   mode: 'production',
   entry: {
-    srcsdk_merchant: ['./src/index.js'],
-    'srcsdk_merchant.min': ['./src/index.js'],
+    bnplsdk_merchant: ['./src/index.js'],
+    'bnplsdk_merchant.min': ['./src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist/prod'),

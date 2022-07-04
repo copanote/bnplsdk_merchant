@@ -17,7 +17,7 @@ const MERCHANT_SDK = () => {
       //validation
       const fields = Object.keys(createInitMessage());
       for (let f of fields) {
-        if (!openParams[f]) {
+        if (f != 'personalId' && !openParams[f]) {
           const fail = createFailMessage('DATA_MISSING', 'required data is misssing');
           reject(fail);
           return;
@@ -78,20 +78,20 @@ const createBnplHiddenField = (params, fieldArr) => {
   const fields = [];
 
   for (let f of fieldArr) {
-    if (loggable) {
-      console.log(f + '::' + params[f]);
+    if (params[f]) {
+      fields.push(createInputHiddenType(f, params[f]));
     }
-    fields.push(createInputHiddenType(f, params[f]));
   }
   return fields;
 };
 
 const createInputHiddenType = (name, value) => {
+  let v = value || '';
   const h = window.document.createElement('input');
   h.setAttribute('type', 'hidden');
   h.setAttribute('id', name);
   h.setAttribute('name', name);
-  h.setAttribute('value', value);
+  h.setAttribute('value', v);
   return h;
 };
 
@@ -117,8 +117,9 @@ const createInitMessage = () => {
     numberOfProduct: '',
     amount: '',
     returnUrl: '',
-    ci: '',
+    personalId: '',
     openType: '',
+    hashCrc: '',
   };
 };
 
