@@ -10,8 +10,8 @@ const Context = () => {
         };
       case 'production':
         return {
-          bnplIntro: '',
-          bnplBaseUrl: '',
+          bnplIntro: '/bnplview.bp?exec=intro',
+          bnplBaseUrl: 'https://paybooc.co.kr/app/paybooc',
           loggable: false,
         };
     }
