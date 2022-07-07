@@ -11,8 +11,57 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://isrnd.bccard.com:34443/app/paybooc/view/bnpl/js/bnplsdk_merchant.min.dev.js"></script>
 
     <script type="text/javascript">
+
+/*
+
+ *   YYYYMMDDHHMMSS
+
+ *   형식으로 날짜를 리턴한다.
+
+ */
+
+ function getDate(){
+
+var currentdate = new Date(); 
+
+
+
+var rst = pad(  currentdate.getFullYear() , 2 ) 
+
+   +  pad(  (currentdate.getMonth()+1)  , 2 ) 
+
++ pad( currentdate.getDate() , 2 ) 
+
++ pad(  currentdate.getHours() , 2 )   
+
++ pad(  currentdate.getMinutes() , 2 ) ; 
+
+return rst;
+
+}
+
+
+
+function pad(number, length) {
+
+var str = '' + number;
+
+while (str.length < length) {
+
+   str = '0' + str;
+
+}
+
+return str;
+
+}    
+
+
+
+
 
         const axiosPost = () => {
             axios.post('https://isrnd.bccard.com:34443/app/paybooc/bnpluser.bp?exec=/auth/sms/request', {
@@ -31,9 +80,12 @@
 
         
             window.addEventListener("load", function() {
-                axiosPost();
-                const queryString = new URLSearchParams(new FormData(myform)).toString()
-                console.log("queryString: " + queryString);
+                // axiosPost();
+                var ele = document.getElementById('nextView');
+                const queryString = new URLSearchParams(new FormData(ele)).toString();
+                console.log("queryString: "  );
+
+                document.getElementById("bnplClientTxId").value = getDate() + 80+ 1234;
 
     
 
@@ -51,6 +103,9 @@
                 parmas.amount = document.getElementById("amount").value;
                 parmas.returnUrl = document.getElementById("returnUrl").value;
                 parmas.openType = document.getElementById("openType").value;
+                parmas.hashCrc = document.getElementById("hashCrc").value;
+                parmas.personalId = document.getElementById("personalId").value;
+
 
                 console.log(JSON.stringify(parmas));
                 window.BcBnpl.open(parmas);
@@ -81,13 +136,19 @@
     amount: '',
     returnUrl: '',
     openType: '',
+    hashCrc: '',
+    personalId: '',
   };
 };
     </script>
            </head>
            <body>
-            <form id="myform" role="form" >
-
+               <form id="nextView" name="nextView" >
+                   <input type="hidden" id="amount" value="100" >
+                   <input type="hidden" id="name" value="SHINDONGWOOK" >
+                   <input type="hidden" id="age" value="35" >
+                   <input type="hidden" id="price" value="12300" >
+               </form>
             <div class="container">
             <form id="myform" role="form" >
                 <div class="form-group">
@@ -116,6 +177,9 @@
                   <label for="numberOfProduct">numberOfProduct  :</label>
                   <input type="text" id="numberOfProduct" class="form-control" placeholder="" value="1">
 
+                  <label for="personalId">personalId  :</label>
+                  <input type="text" id="personalId" class="form-control" placeholder="" value="112311">
+
                   <label for="amount">amount  :</label>
                   <input type="text" id="amount" class="form-control" placeholder="" value="100007">
 
@@ -125,6 +189,9 @@
                   <label for="returnUrl">returnUrl:</label>
                   <input type="text" id="returnUrl" class="form-control" placeholder="" value="">
                   <button class="btn btn-info" type="button"  id="open">BNPL Open</button>
+
+                  <label for="hashCrc">hashCrc:</label>
+                  <input type="text" id="hashCrc" class="form-control" placeholder="hashCrc" value="hashhash">
 
                   <label for="popup">popup</label>
                   <input type="text" id="returnUrl2" class="form-control" placeholder="" value="">
